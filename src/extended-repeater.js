@@ -1,27 +1,14 @@
 const CustomError = require("../extensions/custom-error");
 
-module.exports = function repeater(str, options) {
-const string = String(str);
-const string_2 = String(options.addition);
-const times = options.repeatTimes || 0;
-const separator = options.separator || "+";
-const times_2 = options.additionRepeatTimes || 0;
-const separator_2 = options.additionSeparator || "|";
+module.exports = function repeater(input, options) {
+const str = typeof input === 'string' ? input : String(input);
+const repeatTimes = options.repeatTimes || 1;
+const separator = options.separator || '+';
+const addition = typeof options.addition === 'string' ? options.addition : String(options.addition);
+const additionRepeatTimes = options.additionRepeatTimes || 1;
+const additionSeparator = options.additionSeparator || '|';
 
-let result = "";
-
-if (times === 0) result = string + string_2;
-
-for (let i = 0; i < times; i++) {
-let res = "";
-if (times_2 > 0) {
-for (let j = 0; j < times_2; j++) {
-res += j === times_2 - 1 ? string_2 : string_2 + separator_2;
-}
-}
-
-result += i === times - 1 ? string + res : string + res + separator;
-}
-
+const additionStr = Array(additionRepeatTimes).fill(addition === 'undefined' ? '' : addition).join(additionSeparator);
+const result = Array(repeatTimes).fill(`${str}${additionStr}`).join(separator);
 return result;
-}
+};
